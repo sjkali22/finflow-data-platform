@@ -20,15 +20,12 @@ env/
 !.env.example
 
 # Data files
-data/raw/*.csv
-data/raw/*.json
-data/raw/*.parquet
-data/processed/*.csv
-data/processed/*.json
-data/processed/*.parquet
+data/raw/*
+data/processed/*
 
-# Keep folder placeholders
+# Keep selected reproducible sample files
 !data/raw/.gitkeep
+!data/raw/transactions_sample.csv
 !data/processed/.gitkeep
 !data/sample/.gitkeep
 
