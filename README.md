@@ -36,15 +36,26 @@ Example users:
 
 Phase 1 — Local MVP
 
-The first version focuses on:
+The current version focuses on:
 
 - Python
 - SQL
 - PostgreSQL
 - Docker Compose
 - Git/GitHub
+- Local CSV generation
 - Local CSV ingestion
 - Basic SQL analysis
+
+## Current Features
+
+- Docker Compose PostgreSQL setup
+- Local `.env` configuration for database credentials
+- Synthetic financial transaction data generator
+- 1,000-row sample transaction CSV
+- PostgreSQL raw table creation script
+- Python loader for inserting transaction data into PostgreSQL
+- Basic exploratory SQL checks
 
 ## Planned Tech Stack
 
@@ -90,3 +101,231 @@ Airflow orchestration
         ↓
 GitHub Actions CI
 ```
+
+## Repository Structure
+
+```text
+finflow-data-platform/
+  README.md
+  .gitignore
+  .env.example
+  requirements.txt
+  docker-compose.yml
+  docs/
+    setup_windows.md
+  data/
+    raw/
+      transactions_sample.csv
+    processed/
+    sample/
+  ingestion/
+    __init__.py
+    generate_sample_transactions.py
+    load_postgres.py
+  sql/
+    ddl/
+      create_raw_transactions.sql
+    exploratory/
+      basic_transaction_checks.sql
+  tests/
+  dashboard/
+    screenshots/
+  .github/
+    workflows/
+```
+
+## Data
+
+The first version uses synthetic financial transaction data generated inside the project.
+
+The generated dataset includes 1,000 sample transactions with the following fields:
+
+- transaction_id
+- transaction_datetime
+- transaction_type
+- amount
+- origin_account
+- destination_account
+- old_balance_origin
+- new_balance_origin
+- old_balance_destination
+- new_balance_destination
+- is_fraud
+- is_flagged_fraud
+- merchant_category
+- location
+- channel
+
+## Transaction Types
+
+The sample data includes:
+
+- PAYMENT
+- TRANSFER
+- CASH_OUT
+- CASH_IN
+- DEBIT
+
+## Channels
+
+The sample data includes:
+
+- mobile_app
+- online_banking
+- atm
+- branch
+- card_terminal
+
+## Phase 1 Local Setup
+
+### 1. Clone the repository
+
+```powershell
+git clone https://github.com/sjkali22/finflow-data-platform.git
+cd finflow-data-platform
+```
+
+### 2. Create a local environment file
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Update `.env` with local database credentials if needed.
+
+### 3. Create and activate a Python virtual environment
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+### 4. Install Python dependencies
+
+```powershell
+pip install -r requirements.txt
+```
+
+### 5. Start PostgreSQL with Docker Compose
+
+```powershell
+docker compose up -d
+```
+
+Check that the container is running:
+
+```powershell
+docker ps
+```
+
+Expected container:
+
+```text
+finflow-postgres
+```
+
+### 6. Generate sample transaction data
+
+```powershell
+python ingestion/generate_sample_transactions.py
+```
+
+This creates:
+
+```text
+data/raw/transactions_sample.csv
+```
+
+### 7. Load transactions into PostgreSQL
+
+```powershell
+python ingestion/load_postgres.py
+```
+
+Expected output:
+
+```text
+Created raw_transactions table
+Loaded 1000 rows into raw_transactions
+
+Database checks:
+- Total rows: 1000
+- Earliest transaction: 2025-01-01 00:28:02
+- Latest transaction: 2025-05-01 18:47:32
+```
+
+## PostgreSQL Table
+
+The current raw landing table is:
+
+```text
+raw_transactions
+```
+
+This table stores the generated transaction records before later transformation with dbt.
+
+## Basic SQL Checks
+
+Exploratory SQL queries are stored in:
+
+```text
+sql/exploratory/basic_transaction_checks.sql
+```
+
+Current checks include:
+
+- Total transaction count
+- Transaction date range
+- Transaction count by type
+- Transaction value by type
+- Transaction count by channel
+- Fraud summary
+- High-value transactions
+
+## Data Quality Checks
+
+Planned checks include:
+
+- Transaction IDs must not be null
+- Transaction IDs must be unique
+- Transaction datetime must not be null
+- Transaction type must be valid
+- Amount must be greater than or equal to zero
+- Origin and destination accounts must not be null
+- Fraud flags must be valid boolean values
+- Final mart keys should be unique
+
+## Portfolio Evidence To Collect
+
+Planned evidence:
+
+- Docker containers running
+- PostgreSQL tables populated
+- SQL query results
+- dbt run success
+- dbt test success
+- Airflow DAG success
+- Snowflake schemas and tables
+- S3 raw files
+- Power BI dashboard
+- GitHub Actions passing
+- Architecture diagram
+
+## Status
+
+Phase 1 local MVP is in progress.
+
+Completed so far:
+
+- Project structure created
+- GitHub repository created
+- PostgreSQL Docker Compose setup added
+- Synthetic transaction data generator added
+- Sample transaction CSV generated
+- Raw transactions table created
+- Transaction data loaded into PostgreSQL
+- Basic SQL checks added
+
+Next planned step:
+
+- Add more structured SQL analysis and prepare for dbt transformations
