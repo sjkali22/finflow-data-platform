@@ -1,0 +1,142 @@
+version: 2
+
+models:
+  - name: int_daily_transaction_summary
+    description: Daily transaction summary used for reporting and monitoring.
+    columns:
+      - name: transaction_date
+        description: Transaction date.
+        tests:
+          - not_null
+          - unique
+
+      - name: total_transactions
+        description: Number of transactions on the transaction date.
+        tests:
+          - not_null
+
+      - name: total_transaction_value
+        description: Total transaction value on the transaction date.
+        tests:
+          - not_null
+
+      - name: fraud_transaction_count
+        description: Number of transactions labelled as fraud on the transaction date.
+        tests:
+          - not_null
+
+      - name: flagged_fraud_transaction_count
+        description: Number of transactions flagged as fraud on the transaction date.
+        tests:
+          - not_null
+
+  - name: int_transaction_type_summary
+    description: Transaction summary aggregated by transaction type.
+    columns:
+      - name: transaction_type
+        description: Type of financial transaction.
+        tests:
+          - not_null
+          - unique
+          - accepted_values:
+              arguments:
+                values:
+                  - PAYMENT
+                  - TRANSFER
+                  - CASH_OUT
+                  - CASH_IN
+                  - DEBIT
+
+      - name: total_transactions
+        description: Number of transactions for the transaction type.
+        tests:
+          - not_null
+
+      - name: total_transaction_value
+        description: Total transaction value for the transaction type.
+        tests:
+          - not_null
+
+  - name: int_suspicious_transaction_flags
+    description: Transaction-level model with suspicious activity rule flags.
+    columns:
+      - name: transaction_id
+        description: Unique transaction identifier.
+        tests:
+          - not_null
+          - unique
+
+      - name: transaction_datetime
+        description: Timestamp when the transaction occurred.
+        tests:
+          - not_null
+
+      - name: transaction_date
+        description: Date derived from transaction_datetime.
+        tests:
+          - not_null
+
+      - name: transaction_type
+        description: Type of financial transaction.
+        tests:
+          - not_null
+
+      - name: amount
+        description: Transaction amount.
+        tests:
+          - not_null
+
+      - name: origin_account
+        description: Account where the transaction originated.
+        tests:
+          - not_null
+
+      - name: destination_account
+        description: Account where the transaction was sent or recorded.
+        tests:
+          - not_null
+
+      - name: is_high_value_transaction
+        description: Flag for transactions with amount greater than or equal to 7500.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - 0
+                  - 1
+
+      - name: is_high_risk_transaction_type
+        description: Flag for high-value TRANSFER or CASH_OUT transactions.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - 0
+                  - 1
+
+      - name: is_high_risk_channel_transaction
+        description: Flag for high-value transactions through mobile app or online banking.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - 0
+                  - 1
+
+      - name: is_account_draining_transaction
+        description: Flag for transactions that reduce the origin account balance to zero.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - 0
+                  - 1
+
+      - name: suspicious_score
+        description: Simple score based on suspicious transaction rules.
+        tests:
+          - not_null
