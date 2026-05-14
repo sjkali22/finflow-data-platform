@@ -1,0 +1,107 @@
+version: 2
+
+sources:
+  - name: raw
+    description: Raw landing tables loaded into PostgreSQL by Python ingestion scripts.
+    schema: public
+    tables:
+      - name: raw_transactions
+        description: Raw synthetic financial transaction records loaded from CSV.
+        columns:
+          - name: transaction_id
+            description: Unique transaction identifier.
+          - name: transaction_datetime
+            description: Timestamp when the transaction occurred.
+          - name: transaction_type
+            description: Type of financial transaction.
+          - name: amount
+            description: Transaction amount.
+          - name: origin_account
+            description: Account where the transaction originated.
+          - name: destination_account
+            description: Account where the transaction was sent or recorded.
+          - name: is_fraud
+            description: Synthetic fraud label. 1 means fraudulent, 0 means not fraudulent.
+          - name: is_flagged_fraud
+            description: Synthetic rule-based fraud flag. 1 means flagged, 0 means not flagged.
+
+models:
+  - name: stg_transactions
+    description: Cleaned staging model for financial transaction records.
+    columns:
+      - name: transaction_id
+        description: Unique transaction identifier.
+        tests:
+          - not_null
+          - unique
+
+      - name: transaction_datetime
+        description: Timestamp when the transaction occurred.
+        tests:
+          - not_null
+
+      - name: transaction_date
+        description: Date derived from transaction_datetime.
+        tests:
+          - not_null
+
+      - name: transaction_type
+        description: Standardised transaction type.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - PAYMENT
+                  - TRANSFER
+                  - CASH_OUT
+                  - CASH_IN
+                  - DEBIT
+
+      - name: amount
+        description: Transaction amount.
+        tests:
+          - not_null
+
+      - name: origin_account
+        description: Account where the transaction originated.
+        tests:
+          - not_null
+
+      - name: destination_account
+        description: Account where the transaction was sent or recorded.
+        tests:
+          - not_null
+
+      - name: is_fraud
+        description: Synthetic fraud label.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - 0
+                  - 1
+
+      - name: is_flagged_fraud
+        description: Synthetic fraud flag.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - 0
+                  - 1
+
+      - name: channel
+        description: Channel used for the transaction.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - mobile_app
+                  - online_banking
+                  - atm
+                  - branch
+                  - card_terminal
