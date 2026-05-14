@@ -1,0 +1,128 @@
+version: 2
+
+models:
+  - name: mart_daily_transaction_volume
+    description: Daily transaction reporting mart for transaction volume, value, and fraud monitoring.
+    columns:
+      - name: transaction_date
+        description: Transaction date.
+        tests:
+          - not_null
+          - unique
+
+      - name: total_transactions
+        description: Total number of transactions on the date.
+        tests:
+          - not_null
+
+      - name: total_transaction_value
+        description: Total transaction value on the date.
+        tests:
+          - not_null
+
+      - name: fraud_transaction_count
+        description: Number of transactions labelled as fraud on the date.
+        tests:
+          - not_null
+
+      - name: fraud_rate_percentage
+        description: Percentage of transactions labelled as fraud on the date.
+        tests:
+          - not_null
+
+  - name: mart_transaction_type_summary
+    description: Reporting mart summarising transaction volume, value, and fraud by transaction type.
+    columns:
+      - name: transaction_type
+        description: Type of transaction.
+        tests:
+          - not_null
+          - unique
+          - accepted_values:
+              arguments:
+                values:
+                  - PAYMENT
+                  - TRANSFER
+                  - CASH_OUT
+                  - CASH_IN
+                  - DEBIT
+
+      - name: total_transactions
+        description: Total number of transactions for the transaction type.
+        tests:
+          - not_null
+
+      - name: total_transaction_value
+        description: Total transaction value for the transaction type.
+        tests:
+          - not_null
+
+      - name: fraud_rate_percentage
+        description: Percentage of transactions labelled as fraud for the transaction type.
+        tests:
+          - not_null
+
+  - name: mart_suspicious_activity
+    description: Reporting mart containing transactions with at least one suspicious activity flag.
+    columns:
+      - name: transaction_id
+        description: Unique transaction identifier.
+        tests:
+          - not_null
+          - unique
+
+      - name: transaction_datetime
+        description: Timestamp when the transaction occurred.
+        tests:
+          - not_null
+
+      - name: transaction_date
+        description: Date derived from transaction_datetime.
+        tests:
+          - not_null
+
+      - name: amount
+        description: Transaction amount.
+        tests:
+          - not_null
+
+      - name: suspicious_score
+        description: Suspicious activity score based on rule-based flags.
+        tests:
+          - not_null
+
+      - name: suspicious_risk_band
+        description: Risk band based on suspicious_score.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - low
+                  - medium
+                  - high
+                  - critical
+
+  - name: mart_high_value_transactions
+    description: Reporting mart containing transactions with amount greater than or equal to 7500.
+    columns:
+      - name: transaction_id
+        description: Unique transaction identifier.
+        tests:
+          - not_null
+          - unique
+
+      - name: transaction_datetime
+        description: Timestamp when the transaction occurred.
+        tests:
+          - not_null
+
+      - name: transaction_date
+        description: Date derived from transaction_datetime.
+        tests:
+          - not_null
+
+      - name: amount
+        description: Transaction amount.
+        tests:
+          - not_null
