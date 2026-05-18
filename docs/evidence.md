@@ -26,25 +26,24 @@ Recommended file naming format:
 
 ## Evidence Checklist
 
-| No. | Evidence                                   | Status     | Notes                                                               |
-| --- | ------------------------------------------ | ---------- | ------------------------------------------------------------------- |
-| 1   | Docker PostgreSQL container running        | To collect | Show `finflow-postgres` running and healthy                         |
-| 2   | PostgreSQL raw table populated             | To collect | Show `SELECT COUNT(*) FROM public.raw_transactions;` returning 1000 |
-| 3   | Synthetic CSV generated                    | To collect | Show `data/raw/transactions_sample.csv` exists                      |
-| 4   | Python loader success                      | To collect | Show terminal output from `python ingestion/load_postgres.py`       |
-| 5   | dbt run success                            | To collect | Show `PASS=8 WARN=0 ERROR=0`                                        |
-| 6   | dbt test success                           | To collect | Show `PASS=68 WARN=0 ERROR=0`                                       |
-| 7   | dbt docs overview page                     | To collect | Show local dbt docs site running                                    |
-| 8   | dbt lineage graph                          | To collect | Show raw to staging to intermediate to mart flow                    |
-| 9   | dbt model page: `stg_transactions`         | To collect | Show columns and tests                                              |
-| 10  | dbt model page: `mart_suspicious_activity` | To collect | Show mart documentation                                             |
-| 11  | GitHub Actions passing                     | To collect | Show green successful CI run                                        |
-| 12  | GitHub repository structure                | To collect | Show clean project folders and README                               |
-| 13  | Documentation files                        | To collect | Show docs folder with architecture, dictionary, governance, sources |
-| 14  | Future Power BI dashboard                  | Planned    | Add after reporting phase                                           |
-| 15  | Future Airflow DAG success                 | Planned    | Add after orchestration phase                                       |
-| 16  | Future Snowflake tables                    | Planned    | Add after cloud warehouse phase                                     |
-| 17  | Future S3 raw storage                      | Planned    | Add after cloud storage phase                                       |
+| No. | Evidence                                   | Status    | Screenshot                                                        |
+| --- | ------------------------------------------ | --------- | ----------------------------------------------------------------- |
+| 1   | Docker PostgreSQL container running        | Collected | `dashboard/screenshots/01-docker-postgres-running.png`            |
+| 2   | PostgreSQL raw table populated             | Collected | `dashboard/screenshots/02-postgres-raw-table-count.png`           |
+| 3   | Suspicious activity mart populated         | Collected | `dashboard/screenshots/03-postgres-suspicious-activity-count.png` |
+| 4   | dbt run success                            | Collected | `dashboard/screenshots/04-dbt-run-success.png`                    |
+| 5   | dbt test success                           | Collected | `dashboard/screenshots/05-dbt-test-success.png`                   |
+| 6   | dbt docs overview page                     | Collected | `dashboard/screenshots/06-dbt-docs-overview.png`                  |
+| 7   | dbt lineage graph                          | Collected | `dashboard/screenshots/07-dbt-lineage-graph.png`                  |
+| 8   | dbt model page: `stg_transactions`         | Collected | `dashboard/screenshots/08-dbt-stg-transactions-model.png`         |
+| 9   | dbt model page: `mart_suspicious_activity` | Collected | `dashboard/screenshots/09-dbt-mart-suspicious-activity-model.png` |
+| 10  | GitHub Actions passing                     | Collected | `dashboard/screenshots/10-github-actions-success.png`             |
+| 11  | GitHub repository structure                | Collected | `dashboard/screenshots/11-github-repo-homepage.png`               |
+| 12  | Documentation folder                       | Collected | `dashboard/screenshots/12-github-docs-folder.png`                 |
+| 13  | Future Power BI dashboard                  | Planned   | Add after reporting phase                                         |
+| 14  | Future Airflow DAG success                 | Planned   | Add after orchestration phase                                     |
+| 15  | Future Snowflake tables                    | Planned   | Add after cloud warehouse phase                                   |
+| 16  | Future S3 raw storage                      | Planned   | Add after cloud storage phase                                     |
 
 ## Current Technical Evidence
 
