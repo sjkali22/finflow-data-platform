@@ -2,104 +2,101 @@
 
 FinFlow is a production-style data engineering portfolio project built for a fictional financial services client.
 
-The project demonstrates how financial transaction data can be ingested, stored, transformed, tested, orchestrated, and prepared for reporting using widely used data engineering tools.
+The project demonstrates how financial transaction data can be generated, stored, loaded, transformed, tested, documented, and prepared for analytics using widely recognised data engineering tools.
 
 ## Business Problem
 
 A fictional financial services client needs an automated daily data pipeline that ingests transaction data, stores raw files in a cloud-style data lake, loads records into a warehouse, transforms them into analytics-ready tables, validates data quality, and produces reporting outputs for transaction monitoring and suspicious activity analysis.
 
-## Project Goals
+## Project Summary
 
-- Generate or ingest realistic financial transaction data
-- Store raw files locally first, then later in S3-compatible cloud storage
-- Load raw records into PostgreSQL
-- Transform data using SQL and dbt
-- Add data quality tests
-- Orchestrate the pipeline using Apache Airflow
-- Upgrade the warehouse layer to Snowflake
-- Build reporting outputs using Power BI
-- Document the project professionally for CV, GitHub, LinkedIn, and job applications
+FinFlow currently implements a local batch data pipeline using Python, PostgreSQL, Docker, and dbt.
 
-## Target Users
+The current pipeline:
 
-This project is framed as a client delivery project for a fictional retail banking or financial services organisation.
+1. Generates synthetic financial transaction data
+2. Stores the raw CSV file locally
+3. Loads raw records into PostgreSQL
+4. Builds dbt staging, intermediate, and mart models
+5. Runs dbt data quality tests
+6. Generates dbt documentation and lineage
+7. Provides analytics-ready marts for transaction monitoring
 
-Example users:
+## Current Status
 
-- Data engineering team
-- Analytics team
-- Financial crime monitoring team
-- Business reporting team
-- Operations team
-
-## Current Phase
-
-Phase 1 — Local MVP
-
-The current version focuses on:
-
-- Python
-- SQL
-- PostgreSQL
-- Docker Compose
-- Git/GitHub
-- Local CSV generation
-- Local CSV ingestion
-- Basic SQL analysis
-
-## Current Features
-
-- Docker Compose PostgreSQL setup
-- Local `.env` configuration for database credentials
-- Synthetic financial transaction data generator
-- 1,000-row sample transaction CSV
-- PostgreSQL raw table creation script
-- Python loader for inserting transaction data into PostgreSQL
-- Basic exploratory SQL checks
-
-## Planned Tech Stack
-
-Core stack:
-
-- Python
-- SQL
-- PostgreSQL
-- Docker Compose
-- Git/GitHub
-
-Later additions:
-
-- dbt
-- Apache Airflow
-- AWS S3 or S3-compatible storage
-- Snowflake
-- Power BI
-- GitHub Actions
-- Optional Great Expectations
-- Optional PySpark/Databricks after the main project is complete
-
-## Planned Architecture
+Current phase:
 
 ```text
-Financial transaction CSV/API
+Phase 1/2 — Local MVP and dbt modelling complete
+```
+
+Completed so far:
+
+- Project structure created
+- GitHub repository created
+- PostgreSQL Docker Compose setup added
+- Synthetic transaction data generator added
+- Sample transaction CSV generated
+- Raw transaction table created
+- Transaction data loaded into PostgreSQL
+- dbt project configured for PostgreSQL
+- dbt staging model created
+- dbt intermediate models created
+- dbt reporting mart models created
+- dbt tests added and passing
+- dbt docs generated locally
+- Project documentation added
+
+## Tech Stack
+
+Current stack:
+
+| Area              | Tool                    |
+| ----------------- | ----------------------- |
+| Programming       | Python                  |
+| Data manipulation | pandas                  |
+| Database          | PostgreSQL              |
+| Containerisation  | Docker / Docker Compose |
+| Transformation    | dbt                     |
+| Data quality      | dbt tests               |
+| Version control   | Git / GitHub            |
+| Documentation     | Markdown, dbt docs      |
+
+Planned additions:
+
+| Area                | Tool                            |
+| ------------------- | ------------------------------- |
+| Orchestration       | Apache Airflow                  |
+| Cloud raw storage   | AWS S3 or S3-compatible storage |
+| Cloud warehouse     | Snowflake                       |
+| Reporting           | Power BI                        |
+| CI/CD               | GitHub Actions                  |
+| Optional validation | Great Expectations              |
+
+## Current Architecture
+
+```text
+Synthetic transaction generator
         ↓
-Python ingestion/generation script
+data/raw/transactions_sample.csv
         ↓
-Raw file storage: data/raw locally, later AWS S3
+Python PostgreSQL loader
         ↓
-PostgreSQL local landing database
+PostgreSQL public.raw_transactions
         ↓
-dbt transformations
+dbt staging model
         ↓
-Analytics-ready marts
+dbt intermediate models
         ↓
-dbt tests / data quality checks
+dbt mart models
         ↓
-Power BI dashboard/reporting
-        ↓
-Airflow orchestration
-        ↓
-GitHub Actions CI
+SQL analysis / future Power BI dashboard
+```
+
+More detail is available in:
+
+```text
+docs/architecture.md
 ```
 
 ## Repository Structure
@@ -112,6 +109,10 @@ finflow-data-platform/
   requirements.txt
   docker-compose.yml
   docs/
+    architecture.md
+    data_dictionary.md
+    data_sources.md
+    governance_notes.md
     setup_windows.md
   data/
     raw/
@@ -127,6 +128,12 @@ finflow-data-platform/
       create_raw_transactions.sql
     exploratory/
       basic_transaction_checks.sql
+  dbt/
+    finflow_dbt/
+      models/
+        staging/
+        intermediate/
+        marts/
   tests/
   dashboard/
     screenshots/
@@ -136,9 +143,9 @@ finflow-data-platform/
 
 ## Data
 
-The first version uses synthetic financial transaction data generated inside the project.
+The current version uses synthetic financial transaction data generated inside the project.
 
-The generated dataset includes 1,000 sample transactions with the following fields:
+The dataset contains 1,000 sample transactions with fields including:
 
 - transaction_id
 - transaction_datetime
@@ -156,27 +163,65 @@ The generated dataset includes 1,000 sample transactions with the following fiel
 - location
 - channel
 
-## Transaction Types
+More detail is available in:
 
-The sample data includes:
+```text
+docs/data_sources.md
+docs/data_dictionary.md
+```
 
-- PAYMENT
-- TRANSFER
-- CASH_OUT
-- CASH_IN
-- DEBIT
+## dbt Models
 
-## Channels
+### Raw Layer
 
-The sample data includes:
+| Object                  | Description                                                 |
+| ----------------------- | ----------------------------------------------------------- |
+| public.raw_transactions | Raw synthetic financial transaction records loaded from CSV |
 
-- mobile_app
-- online_banking
-- atm
-- branch
-- card_terminal
+### Staging Layer
 
-## Phase 1 Local Setup
+| Model                      | Description                                  |
+| -------------------------- | -------------------------------------------- |
+| analytics.stg_transactions | Cleaned and standardised transaction records |
+
+### Intermediate Layer
+
+| Model                                      | Description                                        |
+| ------------------------------------------ | -------------------------------------------------- |
+| analytics.int_daily_transaction_summary    | Daily transaction volume, value, and fraud summary |
+| analytics.int_transaction_type_summary     | Aggregated metrics by transaction type             |
+| analytics.int_suspicious_transaction_flags | Transaction-level suspicious activity rule flags   |
+
+### Mart Layer
+
+| Model                                   | Description                                   |
+| --------------------------------------- | --------------------------------------------- |
+| analytics.mart_daily_transaction_volume | Final daily transaction monitoring table      |
+| analytics.mart_transaction_type_summary | Final transaction type reporting table        |
+| analytics.mart_suspicious_activity      | Final suspicious activity monitoring table    |
+| analytics.mart_high_value_transactions  | Final high-value transaction monitoring table |
+
+## Data Quality Tests
+
+The project currently uses dbt tests to validate:
+
+- Unique transaction IDs
+- Not-null transaction IDs
+- Not-null transaction dates
+- Accepted transaction types
+- Accepted transaction channels
+- Accepted fraud flag values
+- Unique reporting dates in daily marts
+- Unique transaction types in type summary marts
+- Not-null reporting metrics
+
+Current dbt test result:
+
+```text
+PASS=68 WARN=0 ERROR=0
+```
+
+## Local Setup — Windows
 
 ### 1. Clone the repository
 
@@ -191,7 +236,17 @@ cd finflow-data-platform
 Copy-Item .env.example .env
 ```
 
-Update `.env` with local database credentials if needed.
+Update `.env` if needed.
+
+Default local development values:
+
+```text
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_DB=finflow
+POSTGRES_USER=finflow_user
+POSTGRES_PASSWORD=finflow_password
+```
 
 ### 3. Create and activate a Python virtual environment
 
@@ -200,19 +255,19 @@ python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
-### 4. Install Python dependencies
+### 4. Install dependencies
 
 ```powershell
 pip install -r requirements.txt
 ```
 
-### 5. Start PostgreSQL with Docker Compose
+### 5. Start PostgreSQL
 
 ```powershell
 docker compose up -d
 ```
 
-Check that the container is running:
+Check the container:
 
 ```powershell
 docker ps
@@ -247,85 +302,199 @@ Expected output:
 ```text
 Created raw_transactions table
 Loaded 1000 rows into raw_transactions
-
-Database checks:
-- Total rows: 1000
-- Earliest transaction: 2025-01-01 00:28:02
-- Latest transaction: 2025-05-01 18:47:32
 ```
 
-## PostgreSQL Table
+### 8. Run dbt models
 
-The current raw landing table is:
+```powershell
+cd dbt\finflow_dbt
+dbt run
+```
+
+Expected result:
 
 ```text
-raw_transactions
+PASS=8 WARN=0 ERROR=0
 ```
 
-This table stores the generated transaction records before later transformation with dbt.
+### 9. Run dbt tests
 
-## Basic SQL Checks
+```powershell
+dbt test
+```
 
-Exploratory SQL queries are stored in:
+Expected result:
 
 ```text
-sql/exploratory/basic_transaction_checks.sql
+PASS=68 WARN=0 ERROR=0
 ```
 
-Current checks include:
+### 10. Generate dbt documentation
 
-- Total transaction count
-- Transaction date range
-- Transaction count by type
-- Transaction value by type
-- Transaction count by channel
-- Fraud summary
-- High-value transactions
+```powershell
+dbt docs generate
+dbt docs serve
+```
 
-## Data Quality Checks
+The local dbt documentation site usually opens at:
 
-Planned checks include:
+```text
+http://localhost:8080
+```
 
-- Transaction IDs must not be null
-- Transaction IDs must be unique
-- Transaction datetime must not be null
-- Transaction type must be valid
-- Amount must be greater than or equal to zero
-- Origin and destination accounts must not be null
-- Fraud flags must be valid boolean values
-- Final mart keys should be unique
+## Useful Commands
 
-## Portfolio Evidence To Collect
+Start PostgreSQL:
 
-Planned evidence:
+```powershell
+docker compose up -d
+```
 
-- Docker containers running
-- PostgreSQL tables populated
-- SQL query results
+Stop PostgreSQL:
+
+```powershell
+docker compose down
+```
+
+Reset PostgreSQL and delete the local database volume:
+
+```powershell
+docker compose down -v
+```
+
+Connect to PostgreSQL:
+
+```powershell
+docker exec -it finflow-postgres psql -U finflow_user -d finflow
+```
+
+Run the full local pipeline manually:
+
+```powershell
+python ingestion/generate_sample_transactions.py
+python ingestion/load_postgres.py
+cd dbt\finflow_dbt
+dbt run
+dbt test
+```
+
+## Example SQL Checks
+
+Check raw transaction count:
+
+```sql
+SELECT COUNT(*) FROM public.raw_transactions;
+```
+
+Check daily mart count:
+
+```sql
+SELECT COUNT(*) FROM analytics.mart_daily_transaction_volume;
+```
+
+Check suspicious activity risk bands:
+
+```sql
+SELECT
+    suspicious_risk_band,
+    COUNT(*) AS transaction_count
+FROM analytics.mart_suspicious_activity
+GROUP BY suspicious_risk_band
+ORDER BY transaction_count DESC;
+```
+
+## Documentation
+
+| Document                   | Purpose                                                    |
+| -------------------------- | ---------------------------------------------------------- |
+| `docs/architecture.md`     | Explains current and future architecture                   |
+| `docs/data_sources.md`     | Documents current and future data sources                  |
+| `docs/data_dictionary.md`  | Documents raw, staging, intermediate, and mart fields      |
+| `docs/governance_notes.md` | Explains privacy, secrets, reproducibility, and governance |
+| `docs/setup_windows.md`    | Windows setup guide                                        |
+
+## Portfolio Evidence
+
+Evidence collected or planned:
+
+- Docker container running
+- PostgreSQL raw table populated
 - dbt run success
 - dbt test success
-- Airflow DAG success
-- Snowflake schemas and tables
-- S3 raw files
-- Power BI dashboard
-- GitHub Actions passing
-- Architecture diagram
+- dbt docs site
+- dbt lineage graph
+- dbt model pages
+- GitHub repository structure
+- Final architecture diagram
+- Future Power BI dashboard
 
-## Status
+Screenshots should be stored under:
 
-Phase 1 local MVP is in progress.
+```text
+dashboard/screenshots/
+```
 
-Completed so far:
+## Governance Notes
 
-- Project structure created
-- GitHub repository created
-- PostgreSQL Docker Compose setup added
-- Synthetic transaction data generator added
-- Sample transaction CSV generated
-- Raw transactions table created
-- Transaction data loaded into PostgreSQL
-- Basic SQL checks added
+The project uses synthetic data only.
 
-Next planned step:
+It does not contain:
 
-- Add more structured SQL analysis and prepare for dbt transformations
+- Real customer data
+- Real account data
+- Real bank data
+- Real personal data
+- Real merchant data
+
+Local secrets are stored in `.env`, which is ignored by Git.
+
+A safe template is provided in:
+
+```text
+.env.example
+```
+
+More detail is available in:
+
+```text
+docs/governance_notes.md
+```
+
+## Roadmap
+
+### Completed
+
+- Local project structure
+- PostgreSQL Docker setup
+- Synthetic data generation
+- PostgreSQL loading
+- dbt staging model
+- dbt intermediate models
+- dbt mart models
+- dbt tests
+- dbt docs
+- Core documentation
+
+### Next
+
+- Add screenshots and evidence files
+- Add GitHub Actions checks
+- Add Airflow orchestration
+- Add Power BI reporting output
+
+### Later
+
+- Add S3-compatible raw storage
+- Add Snowflake warehouse
+- Move dbt transformations to Snowflake
+- Add cloud architecture documentation
+- Optional Great Expectations validation
+- Optional larger public dataset extension
+
+## CV Summary
+
+FinFlow is an end-to-end batch data engineering platform for a fictional financial services client. It uses Python and SQL to generate, ingest, load, transform, and validate transaction data. The project includes a PostgreSQL landing database, Docker-based local development environment, dbt staging/intermediate/mart models, automated dbt data quality tests, and analytics-ready outputs for transaction monitoring and suspicious activity analysis.
+
+## Technologies
+
+Python, SQL, PostgreSQL, Docker, Docker Compose, dbt, pandas, SQLAlchemy, Git, GitHub.
