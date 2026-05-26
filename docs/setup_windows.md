@@ -29,9 +29,9 @@ Copy-Item .env.example .env
 
 The `.env` file is ignored by Git and should not be committed.
 
-## PostgreSQL Docker Setup
+## Docker Services
 
-The local PostgreSQL database runs inside Docker using `docker-compose.yml`.
+The local PostgreSQL database and Airflow services run inside Docker using `docker-compose.yml`.
 
 Database details for local development:
 
@@ -44,7 +44,22 @@ Password: stored locally in .env
 Container name: finflow-postgres
 ```
 
-## Start PostgreSQL
+Airflow local UI:
+
+```text
+http://localhost:8080
+```
+
+Local Airflow login:
+
+```text
+Username: admin
+Password: admin
+```
+
+The Airflow username and password are local development credentials only.
+
+## Start Local Docker Services
 
 From the project root, run:
 
@@ -62,7 +77,12 @@ Expected container:
 
 ```text
 finflow-postgres
+airflow-postgres
+airflow-webserver
+airflow-scheduler
 ```
+
+The `airflow-init` container initializes the Airflow metadata database and may exit after completing successfully.
 
 ## Check Database Health
 
@@ -102,19 +122,44 @@ Exit PostgreSQL:
 \q
 ```
 
-## Stop PostgreSQL
+## Stop Local Docker Services
 
 ```powershell
 docker compose down
 ```
 
-## Stop PostgreSQL and Delete Local Database Volume
+This stops PostgreSQL and Airflow services.
 
-Only use this if you want to reset the local database completely:
+## Stop Services and Delete Local Database Volumes
+
+Only use this if you want to reset the local PostgreSQL and Airflow metadata databases completely:
 
 ```powershell
 docker compose down -v
 ```
+
+## Airflow Local Files
+
+Airflow project files are stored under:
+
+```text
+orchestration/airflow/
+```
+
+Tracked folders:
+
+```text
+orchestration/airflow/dags/
+orchestration/airflow/plugins/
+```
+
+Runtime logs are written to:
+
+```text
+orchestration/airflow/logs/
+```
+
+Airflow logs and runtime files are ignored by Git. DAG files should be committed.
 
 ## Troubleshooting
 

@@ -261,13 +261,28 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-### 5. Start PostgreSQL
+### 5. Start local Docker services
 
 ```powershell
 docker compose up -d
 ```
 
-Check the container:
+This starts PostgreSQL and the local Airflow services.
+
+Airflow UI:
+
+```text
+http://localhost:8080
+```
+
+Local Airflow login:
+
+```text
+Username: admin
+Password: admin
+```
+
+Check the containers:
 
 ```powershell
 docker ps

@@ -51,6 +51,11 @@ logs/
 # Airflow
 airflow.db
 airflow-webserver.pid
+orchestration/airflow/*.db
+orchestration/airflow/*.pid
+!orchestration/airflow/logs/
+orchestration/airflow/logs/*
+!orchestration/airflow/logs/.gitkeep
 
 # Power BI
 *.pbix
