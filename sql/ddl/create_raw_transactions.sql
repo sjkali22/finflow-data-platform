@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS raw_transactions;
+DROP TABLE IF EXISTS raw_transactions CASCADE;
 
 CREATE TABLE raw_transactions (
     transaction_id VARCHAR(100) PRIMARY KEY,

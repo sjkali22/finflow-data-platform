@@ -84,6 +84,44 @@ airflow-scheduler
 
 The `airflow-init` container initializes the Airflow metadata database and may exit after completing successfully.
 
+## Trigger the Local Airflow DAG
+
+Open Airflow:
+
+```text
+http://localhost:8080
+```
+
+Log in with the local development credentials:
+
+```text
+Username: admin
+Password: admin
+```
+
+Find the DAG:
+
+```text
+finflow_local_pipeline
+```
+
+Unpause the DAG if needed, then trigger it manually from the Airflow UI.
+
+The DAG runs these tasks in order:
+
+```text
+generate_transactions
+load_to_postgres
+dbt_run
+dbt_test
+```
+
+The run is successful when all four tasks are green and the `dbt_test` task log shows:
+
+```text
+PASS=68 WARN=0 ERROR=0
+```
+
 ## Check Database Health
 
 ```powershell

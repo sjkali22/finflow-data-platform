@@ -4,6 +4,28 @@ This document defines the planned Apache Airflow orchestration layer for FinFlow
 
 The current project already has a working local pipeline using Python, PostgreSQL, Docker, and dbt. Airflow will be added as the next orchestration layer after the pipeline has been proven to run manually.
 
+## Current Implementation Status
+
+The first local Airflow DAG has been implemented:
+
+```text
+finflow_local_pipeline
+```
+
+Current task order:
+
+```text
+generate_transactions
+        ->
+load_to_postgres
+        ->
+dbt_run
+        ->
+dbt_test
+```
+
+The DAG is manually triggered and runs inside the local Docker Compose Airflow services. It uses the existing Python ingestion scripts, PostgreSQL service, dbt project, and dbt tests.
+
 ## Why Airflow Is Being Added
 
 Airflow is being added to show how the FinFlow pipeline would be scheduled, monitored, retried, and operated in a production-style environment.
@@ -39,13 +61,13 @@ Airflow will not contain business transformation logic directly. The transformat
 Planned DAG name:
 
 ```text
-finflow_daily_transactions_pipeline
+finflow_local_pipeline
 ```
 
-Planned DAG file:
+Current DAG file:
 
 ```text
-airflow/dags/finflow_daily_transactions_pipeline.py
+orchestration/airflow/dags/finflow_local_pipeline.py
 ```
 
 Initial scheduling approach:

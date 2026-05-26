@@ -27,7 +27,7 @@ The current pipeline:
 Current phase:
 
 ```text
-Phase 1/2 — Local MVP and dbt modelling complete
+Phase 3 — Airflow orchestration in progress
 ```
 
 Completed so far:
@@ -282,6 +282,14 @@ Username: admin
 Password: admin
 ```
 
+Current local DAG:
+
+```text
+finflow_local_pipeline
+```
+
+The DAG runs the local pipeline in order: generate transactions, load PostgreSQL, run dbt models, and run dbt tests.
+
 Check the containers:
 
 ```powershell
@@ -490,12 +498,12 @@ docs/governance_notes.md
 - dbt tests
 - dbt docs
 - Core documentation
+- Airflow local Docker services
+- Airflow local pipeline DAG
 
 ### Next
 
-- Add screenshots and evidence files
-- Add GitHub Actions checks
-- Add Airflow orchestration
+- Add Airflow screenshots and evidence files
 - Add Power BI reporting output
 
 ### Later

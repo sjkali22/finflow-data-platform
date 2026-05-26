@@ -53,6 +53,7 @@ airflow.db
 airflow-webserver.pid
 orchestration/airflow/*.db
 orchestration/airflow/*.pid
+orchestration/airflow/profiles/.user.yml
 !orchestration/airflow/logs/
 orchestration/airflow/logs/*
 !orchestration/airflow/logs/.gitkeep
