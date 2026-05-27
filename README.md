@@ -10,7 +10,7 @@ A fictional financial services client needs an automated daily data pipeline tha
 
 ## Project Summary
 
-FinFlow currently implements a local batch data pipeline using Python, PostgreSQL, Docker, and dbt.
+FinFlow currently implements a local batch data pipeline using Python, PostgreSQL, Docker, dbt, and Apache Airflow.
 
 The current pipeline:
 
@@ -19,15 +19,20 @@ The current pipeline:
 3. Loads raw records into PostgreSQL
 4. Builds dbt staging, intermediate, and mart models
 5. Runs dbt data quality tests
-6. Generates dbt documentation and lineage
-7. Provides analytics-ready marts for transaction monitoring
+6. Orchestrates the workflow with Airflow
+7. Generates dbt documentation and lineage
+8. Provides analytics-ready marts and reporting SQL for transaction monitoring
+
+## How to Explain This Project
+
+FinFlow is a local-first batch data engineering platform for a fictional financial services client. It generates synthetic transaction data, loads it into PostgreSQL, transforms it with dbt into analytics-ready marts, validates data quality with dbt tests, orchestrates the workflow with Airflow, and prepares reporting queries for future Power BI dashboards.
 
 ## Current Status
 
 Current phase:
 
 ```text
-Phase 3 — Airflow orchestration in progress
+Portfolio polish and reporting preparation
 ```
 
 Completed so far:
@@ -45,7 +50,13 @@ Completed so far:
 - dbt reporting mart models created
 - dbt tests added and passing
 - dbt docs generated locally
+- GitHub Actions CI added and passing
+- Airflow Docker setup added
+- Airflow local pipeline DAG added and verified
+- Reporting SQL queries added
+- Power BI dashboard plan added
 - Project documentation added
+- Evidence screenshots collected for PostgreSQL, dbt, GitHub, and Airflow
 
 ## Tech Stack
 
@@ -59,18 +70,19 @@ Current stack:
 | Containerisation  | Docker / Docker Compose |
 | Transformation    | dbt                     |
 | Data quality      | dbt tests               |
+| Orchestration     | Apache Airflow          |
+| Reporting prep    | SQL reporting queries   |
+| CI/CD             | GitHub Actions          |
 | Version control   | Git / GitHub            |
 | Documentation     | Markdown, dbt docs      |
 
-Planned additions:
+Future additions:
 
 | Area                | Tool                            |
 | ------------------- | ------------------------------- |
-| Orchestration       | Apache Airflow                  |
 | Cloud raw storage   | AWS S3 or S3-compatible storage |
 | Cloud warehouse     | Snowflake                       |
 | Reporting           | Power BI                        |
-| CI/CD               | GitHub Actions                  |
 | Optional validation | Great Expectations              |
 
 ## Current Architecture
@@ -90,7 +102,11 @@ dbt intermediate models
         ↓
 dbt mart models
         ↓
-SQL analysis / future Power BI dashboard
+dbt tests
+        ↓
+Airflow orchestration
+        ↓
+Reporting SQL / future Power BI dashboard
 ```
 
 More detail is available in:
@@ -112,7 +128,11 @@ finflow-data-platform/
     architecture.md
     data_dictionary.md
     data_sources.md
+    evidence.md
     governance_notes.md
+    orchestration_plan.md
+    powerbi_dashboard_plan.md
+    project_readiness_checklist.md
     setup_windows.md
   data/
     raw/
@@ -135,7 +155,12 @@ finflow-data-platform/
         intermediate/
         marts/
   tests/
+  orchestration/
+    airflow/
+      dags/
+      profiles/
   dashboard/
+    queries/
     screenshots/
   .github/
     workflows/
@@ -296,10 +321,13 @@ Check the containers:
 docker ps
 ```
 
-Expected container:
+Expected containers:
 
 ```text
 finflow-postgres
+airflow-postgres
+airflow-webserver
+airflow-scheduler
 ```
 
 ### 6. Generate sample transaction data
@@ -356,30 +384,32 @@ PASS=68 WARN=0 ERROR=0
 
 ```powershell
 dbt docs generate
-dbt docs serve
+dbt docs serve --port 8081
 ```
 
-The local dbt documentation site usually opens at:
+The local dbt documentation site opens at:
 
 ```text
-http://localhost:8080
+http://localhost:8081
 ```
+
+Airflow uses `http://localhost:8080`, so dbt docs should use a different local port when Airflow is running.
 
 ## Useful Commands
 
-Start PostgreSQL:
+Start local Docker services:
 
 ```powershell
 docker compose up -d
 ```
 
-Stop PostgreSQL:
+Stop local Docker services:
 
 ```powershell
 docker compose down
 ```
 
-Reset PostgreSQL and delete the local database volume:
+Reset local Docker database volumes:
 
 ```powershell
 docker compose down -v
@@ -466,14 +496,24 @@ Evidence collected or planned:
 - dbt docs site
 - dbt lineage graph
 - dbt model pages
+- GitHub Actions passing
+- Airflow containers running
+- Airflow DAG visible
+- Airflow DAG successful run
+- Airflow task graph
 - GitHub repository structure
-- Final architecture diagram
 - Future Power BI dashboard
 
 Screenshots should be stored under:
 
 ```text
 dashboard/screenshots/
+```
+
+The evidence log is maintained in:
+
+```text
+docs/evidence.md
 ```
 
 ## Governance Notes
@@ -516,13 +556,18 @@ docs/governance_notes.md
 - dbt tests
 - dbt docs
 - Core documentation
+- GitHub Actions CI
 - Airflow local Docker services
 - Airflow local pipeline DAG
+- Airflow evidence screenshots
+- Reporting SQL queries
+- Power BI dashboard plan
 
 ### Next
 
-- Add Airflow screenshots and evidence files
-- Add Power BI reporting output
+- Build or mock Power BI dashboard screenshots
+- Final README/CV/LinkedIn wording polish
+- Check setup instructions from a clean clone
 
 ### Later
 
@@ -535,8 +580,8 @@ docs/governance_notes.md
 
 ## CV Summary
 
-FinFlow is an end-to-end batch data engineering platform for a fictional financial services client. It uses Python and SQL to generate, ingest, load, transform, and validate transaction data. The project includes a PostgreSQL landing database, Docker-based local development environment, dbt staging/intermediate/mart models, automated dbt data quality tests, and analytics-ready outputs for transaction monitoring and suspicious activity analysis.
+FinFlow is an end-to-end batch data engineering platform for a fictional financial services client. It uses Python and SQL to generate, ingest, load, transform, validate, orchestrate, and prepare reporting outputs for transaction data. The project includes a PostgreSQL landing database, Docker-based local development environment, dbt staging/intermediate/mart models, automated dbt data quality tests, Airflow orchestration, GitHub Actions CI, and analytics-ready outputs for transaction monitoring and suspicious activity analysis.
 
 ## Technologies
 
-Python, SQL, PostgreSQL, Docker, Docker Compose, dbt, pandas, SQLAlchemy, Git, GitHub.
+Python, SQL, PostgreSQL, Docker, Docker Compose, dbt, Apache Airflow, pandas, SQLAlchemy, Git, GitHub, GitHub Actions.

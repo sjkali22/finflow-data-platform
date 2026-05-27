@@ -19,6 +19,13 @@ Recommended local path:
 C:\Users\suraj\Documents\PortfolioProjects\finflow-data-platform
 ```
 
+Clone the repository:
+
+```powershell
+git clone https://github.com/sjkali22/finflow-data-platform.git
+cd finflow-data-platform
+```
+
 ## Environment Variables
 
 Create a local `.env` file from `.env.example`:
@@ -28,6 +35,16 @@ Copy-Item .env.example .env
 ```
 
 The `.env` file is ignored by Git and should not be committed.
+
+## Python Environment
+
+Create and activate a local virtual environment from the project root:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
 
 ## Docker Services
 
@@ -73,7 +90,7 @@ docker compose up -d
 docker ps
 ```
 
-Expected container:
+Expected containers:
 
 ```text
 finflow-postgres
@@ -83,6 +100,40 @@ airflow-scheduler
 ```
 
 The `airflow-init` container initializes the Airflow metadata database and may exit after completing successfully.
+
+## Generate and Load Local Data
+
+From the project root:
+
+```powershell
+python ingestion/generate_sample_transactions.py
+python ingestion/load_postgres.py
+```
+
+Expected loader output includes:
+
+```text
+Created raw_transactions table
+Loaded 1000 rows into raw_transactions
+```
+
+## Run dbt Models and Tests
+
+From the project root:
+
+```powershell
+cd dbt\finflow_dbt
+dbt run
+dbt test
+cd ..\..
+```
+
+Expected results:
+
+```text
+dbt run: PASS=8 WARN=0 ERROR=0
+dbt test: PASS=68 WARN=0 ERROR=0
+```
 
 ## Trigger the Local Airflow DAG
 

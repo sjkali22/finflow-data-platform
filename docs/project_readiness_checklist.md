@@ -18,7 +18,7 @@ It demonstrates:
 - Power BI dashboard plan
 - Documentation and evidence screenshots
 
-The project is already suitable for explaining an end-to-end local data engineering platform. The remaining work is mainly evidence collection, dashboard screenshots, and final presentation polish.
+The project is already suitable for explaining an end-to-end local data engineering platform. It is now close to portfolio-ready. The remaining work is mainly Power BI/dashboard presentation, final wording polish, and optional cloud extension planning.
 
 ## Completed Technical Features
 
@@ -39,6 +39,7 @@ The project is already suitable for explaining an end-to-end local data engineer
 - [x] Power BI dashboard plan
 - [x] Core documentation
 - [x] Evidence screenshots for local/dbt/GitHub stages
+- [x] Evidence screenshots for Airflow orchestration
 
 ## Evidence Collected
 
@@ -54,14 +55,12 @@ The evidence log is documented in:
 docs/evidence.md
 ```
 
-Collected evidence currently covers the local PostgreSQL, dbt, dbt docs, GitHub repository, and GitHub Actions stages.
+Collected evidence currently covers the local PostgreSQL, dbt, dbt docs, GitHub repository, GitHub Actions, and Airflow orchestration stages.
 
-Airflow screenshots are still pending and should be collected before the project is presented as fully portfolio-ready.
+The evidence log has been updated with Airflow screenshots. Power BI dashboard screenshots remain pending until the dashboard is built or mocked.
 
 ## Remaining Before Portfolio Ready
 
-- [ ] Collect Airflow evidence screenshots
-- [ ] Update `docs/evidence.md` with Airflow evidence
 - [ ] Optionally build Power BI dashboard screenshots
 - [ ] Complete final README review
 - [ ] Draft final CV bullet points
@@ -81,10 +80,9 @@ Airflow screenshots are still pending and should be collected before the project
 
 ## Recommended Next Steps
 
-- Step 22: Collect Airflow screenshots
-- Step 23: Update evidence log
 - Step 24: Build or mock Power BI dashboard
 - Step 25: Final README/CV/LinkedIn polish
+- Step 26: Optional clean-clone setup check
 
 ## Interview Talking Points
 
