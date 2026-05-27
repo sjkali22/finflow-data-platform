@@ -437,6 +437,16 @@ ORDER BY transaction_count DESC;
 | `docs/governance_notes.md`   | Explains privacy, secrets, reproducibility, and governance |
 | `docs/setup_windows.md`      | Windows setup guide                                        |
 
+## Reporting Queries
+
+Dashboard-ready SQL queries are available under:
+
+```text
+dashboard/queries/
+```
+
+These queries read from the dbt staging and mart models and are intended for later Power BI/dashboard development.
+
 ## Portfolio Evidence
 
 Evidence collected or planned:
