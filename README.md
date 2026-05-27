@@ -428,14 +428,15 @@ ORDER BY transaction_count DESC;
 
 ## Documentation
 
-| Document                     | Purpose                                                    |
-| ---------------------------- | ---------------------------------------------------------- |
-| `docs/architecture.md`       | Explains current and future architecture                   |
-| `docs/data_sources.md`       | Documents current and future data sources                  |
-| `docs/data_dictionary.md`    | Documents raw, staging, intermediate, and mart fields      |
-| `docs/orchestration_plan.md` | Plans the Apache Airflow orchestration layer               |
-| `docs/governance_notes.md`   | Explains privacy, secrets, reproducibility, and governance |
-| `docs/setup_windows.md`      | Windows setup guide                                        |
+| Document                          | Purpose                                                    |
+| --------------------------------- | ---------------------------------------------------------- |
+| `docs/architecture.md`            | Explains current and future architecture                   |
+| `docs/data_sources.md`            | Documents current and future data sources                  |
+| `docs/data_dictionary.md`         | Documents raw, staging, intermediate, and mart fields      |
+| `docs/orchestration_plan.md`      | Plans the Apache Airflow orchestration layer               |
+| `docs/powerbi_dashboard_plan.md`  | Plans the future Power BI dashboard                        |
+| `docs/governance_notes.md`        | Explains privacy, secrets, reproducibility, and governance |
+| `docs/setup_windows.md`           | Windows setup guide                                        |
 
 ## Reporting Queries
 
@@ -446,6 +447,12 @@ dashboard/queries/
 ```
 
 These queries read from the dbt staging and mart models and are intended for later Power BI/dashboard development.
+
+A Power BI dashboard plan is documented in:
+
+```text
+docs/powerbi_dashboard_plan.md
+```
 
 ## Portfolio Evidence
 
